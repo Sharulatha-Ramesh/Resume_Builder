@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Form</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Resume Form</h1>
+        <form action="/submit" id="resumeForm" method="post" enctype="multipart/form-data">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email ID:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+
+            <label for="address">Address:</label>
+            <textarea id="address" name="address" required></textarea>
+
+            <label for="linkedin">LinkedIn URL:</label>
+            <input type="url" id="linkedin" name="linkedin">
+
+            <label for="github">GitHub URL:</label>
+            <input type="url" id="github" name="github">
+
+            <!-- Education section -->
+<div class="form-section">
+    <label for="education">Education:</label>
+    <div id="education-container">
+        <div>
+            <input type="text" name="institution[]" placeholder="Name of Institution">
+            <input type="text" class="year-picker" name="startingYear[]" placeholder="Starting Year">
+            <input type="text" class="year-picker" name="endingYear[]" placeholder="Ending Year">
+            <input type="number" name="percentage[]" placeholder="Percentage">
+        </div>
+    </div>
+    <button type="button" onclick="addEducation()">Add Another</button>
+</div>
+
+            
+            <!-- Soft Skills section -->
+            <div class="form-section">
+                <label for="softskills">Soft Skills:</label>
+                <div id="softskills-container">
+                    <input type="text" name="softskills_0" placeholder="Enter a soft skill...">
+                    <button type="button" onclick="addSoftskill('softskills-container')">Add</button>
+                </div>
+            </div>
+
+            <!-- Technical Skills section -->
+            <div class="form-section">
+                <label for="technicalskills">Technical Skills:</label>
+                <div id="technicalskills-container">
+                    <input type="text" name="technicalskills_0" placeholder="Enter a technical skill...">
+                    <button type="button" onclick="addSoftskill('technicalskills-container')">Add</button>
+                </div>
+            </div>
+
+            <!-- Certifications section -->
+            <div class="form-section">
+                <label for="certifications">Certifications:</label>
+                <div id="certifications-container">
+                    <input type="text" name="certifications_0" placeholder="Enter a certification...">
+                    <button type="button" onclick="addSoftskill('certifications-container')">Add</button>
+                </div>
+            </div>
+
+            <!-- Languages Known section -->
+            <div class="form-section">
+                <label for="languages">Languages Known:</label>
+                <div id="languages-container">
+                    <input type="text" name="languages_0" placeholder="Enter a language...">
+                    <button type="button" onclick="addSoftskill('languages-container')">Add</button>
+                </div>
+            </div>
+            
+
+           <!-- Project Description section -->
+<div class="form-section">
+    <label for="projects">Project Description:</label>
+    <div id="projects-container">
+        <div>
+            <input type="text" name="projectTitle[]" placeholder="Project Title">
+            <textarea name="projectDescription[]" placeholder="Project Description"></textarea>
+            <input type="text" name="stackUsed[]" placeholder="Stack Used">
+        </div>
+    </div>
+    <button type="button" onclick="addProject()">Add Another Project</button>
+</div>
+
+<!-- Internship section -->
+<div class="form-section">
+    <label for="internship">Internship:</label>
+    <div id="internship-container">
+        <div>
+            <input type="text" name="companyName[]" placeholder="Company Name">
+            <input type="text" name="role[]" placeholder="Role">
+            <input type="text" name="duration[]" placeholder="Duration (e.g., 3 months)">
+        </div>
+    </div>
+    <button type="button" onclick="addInternship()">Add Another Internship</button>
+</div>
+
+
+            <!-- Interests section -->
+            <div class="form-section">
+                <label for="interests">Interests:</label>
+                <div id="interests-container">
+                    <input type="text" name="interests_0" placeholder="Enter an interest...">
+                    <button type="button" onclick="addInterest()">Add</button>
+                </div>
+            </div>
+
+            
+
+            <!-- Submit button -->
+            <button type="submit">Submit</button>
+        </form>
+        <!-- Success message -->
+        {% if success_message %}
+        <h2><strong>{{ success_message }}</strong></h2>
+        <br>
+        <br>
+        <p>Resume has been uploaded, <a href="/download">download here</a></p>
+        {% endif %}
+    </div>
+
+    <script>
+        // Function to add another education section
+       // Function to add another education section
+function addEducation() {
+    var container = document.getElementById('education-container');
+    var div = container.querySelector('div');
+    var newDiv = div.cloneNode(true);
+    var inputs = newDiv.querySelectorAll('input');
+    inputs.forEach(function(input) {
+        input.value = '';
+        // Increment the index in the name attribute
+        var index = container.children.length; // Get the number of existing children
+        input.name = input.name.replace(/_\d+$/, '_' + index); // Replace the index in the name attribute
+    });
+    container.appendChild(newDiv);
+}
+
+
+        function addProject() {
+            var container = document.getElementById('projects-container');
+            var div = container.querySelector('div');
+            var newDiv = div.cloneNode(true);
+            var inputs = newDiv.querySelectorAll('input, textarea');
+            inputs.forEach(function(input) {
+                input.value = '';
+                // Increment the index in the name attribute
+                var index = container.children.length; // Get the number of existing children
+                input.name = input.name.replace(/_\d+$/, '_' + index); // Replace the index in the name attribute
+            });
+            container.appendChild(newDiv);
+        }
+        
+        // Function to add another internship section
+        function addInternship() {
+            var container = document.getElementById('internship-container');
+            var div = container.querySelector('div');
+            var newDiv = div.cloneNode(true);
+            var inputs = newDiv.querySelectorAll('input');
+            inputs.forEach(function(input) {
+                input.value = '';
+                // Increment the index in the name attribute
+                var index = container.children.length; // Get the number of existing children
+                input.name = input.name.replace(/_\d+$/, '_' + index); // Replace the index in the name attribute
+            });
+            container.appendChild(newDiv);
+        }
+
+        // Function to add another interest
+        function addInterest() {
+            var container = document.getElementById('interests-container');
+            var input = container.querySelector('input');
+            var newInput = input.cloneNode(true);
+            newInput.value = '';
+            // Increment the index in the name attribute
+            var index = container.children.length; // Get the number of existing children
+            newInput.name = newInput.name.replace(/_\d+$/, '_' + index); // Replace the index in the name attribute
+            container.insertBefore(newInput, container.querySelector('button'));
+        }
+
+        // Function to add another soft skill
+        function addSoftskill(containerId) {
+            var container = document.getElementById(containerId);
+            var input = container.querySelector('input');
+            var newInput = input.cloneNode(true);
+            newInput.value = '';
+            // Increment the index in the name attribute
+            var index = container.children.length; // Get the number of existing children
+            newInput.name = newInput.name.replace(/_\d+$/, '_' + index); // Replace the index in the name attribute
+            container.insertBefore(newInput, container.querySelector('button'));
+        }
+
+    </script>
+</body>
+</html>
